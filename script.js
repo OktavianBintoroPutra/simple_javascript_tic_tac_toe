@@ -22,18 +22,25 @@
 
     xbtn.addEventListener("click", function(){
         var input = document.getElementById(input_id);                    
-        play();
-        input.innerHTML = "<span class='input' style='color:red'>X</span>"; 
-        xbtn.disabled = true;    
-        obtn.disabled = false;
+        if(!input.disabled){            
+            play();
+            input.innerHTML = "<span class='input' style='color:red'>X</span>"; 
+            input.disabled = true;
+            xbtn.disabled = true;    
+            obtn.disabled = false;
+        }
     });
 
     obtn.addEventListener("click", function(){
-        var input = document.getElementById(input_id);                    
-        play();
-        input.innerHTML = "<span class='input' style='color:blue'>O</span>";
-        xbtn.disabled = false;    
-        obtn.disabled = true;
+        var input = document.getElementById(input_id);     
+        if(!input.disabled){
+            play();
+            input.innerHTML = "<span class='input' style='color:blue'>O</span>";
+            input.disabled = true;
+            input.disabled = true;
+            xbtn.disabled = false;    
+            obtn.disabled = true;
+        }                       
     });
 
     function startGame(){        
@@ -46,8 +53,7 @@
                         startGame();
                     }else{
                         alert('stop');
-                    }
-                    ;
+                    };
                 }
             },1
         );
@@ -55,7 +61,12 @@
 
     function reset(){
         player1.style.backgroundColor = "red";        
-        player2.style.backgroundColor = "white";
+        player2.style.backgroundColor = "white";        
+        obtn.style.backgroundColor = "white";
+        obtn.style.color = "white";
+        xbtn.style.backgroundColor = "red";
+        xbtn.style.color = "white";
+        xbtn.disabled = false;    
         obtn.disabled = true;
         current_status = 0;
         player1_choice = '';
@@ -73,10 +84,18 @@
         if(current_status == 0){            
             player1.style.backgroundColor = "white";
             player2.style.backgroundColor = "blue";
+            obtn.style.backgroundColor = "blue";
+            obtn.style.color = "white";
+            xbtn.style.backgroundColor = "white";
+            xbtn.style.color = "white";
             current_status = 1;
         }else{            
             player1.style.backgroundColor = "red";
             player2.style.backgroundColor = "white";
+            obtn.style.backgroundColor = "white";
+            obtn.style.color = "white";
+            xbtn.style.backgroundColor = "red";
+            xbtn.style.color = "white";
             current_status = 0;
         }
     }
@@ -93,6 +112,16 @@
                 nilai = 2;
             }
             input_string += ''+nilai;
+        }
+        // trigger Draw
+        if((input_string.match(/\./g) || []).length == 0){
+                clearInterval(intervalId);
+                if(confirm('Draw')){
+                    reset();
+                    startGame();
+                }else{
+                    alert('stop');
+                };
         }
         return input_string;
     }
